@@ -6,12 +6,13 @@ import {
   getUsers,
   updateUser,
 } from "../Controller/user.Controller";
+import { verifyToken } from "../Middlewares/verifyToken";
 
 const userRouter = Router();
 
 userRouter.post("/", registerUser);
-userRouter.get("/", getUsers);
-userRouter.get("/:id", getOneUser);
-userRouter.put("/update/:id", updateUser);
-userRouter.delete("/delete/:id", deleteUser);
+userRouter.get("/", verifyToken, getUsers);
+userRouter.get("/:id",verifyToken,  getOneUser);
+userRouter.put("/update/:id", verifyToken, updateUser);
+userRouter.delete("/delete/:id", verifyToken, deleteUser);
 export default userRouter;

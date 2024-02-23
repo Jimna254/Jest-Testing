@@ -1,0 +1,27 @@
+### login
+POST http://localhost:3011/users/login
+Content-Type: application/json
+
+{
+    "email": "james.kariuki@thejitu.com", 
+    "password": "123456789"
+   
+}
+
+### resetpwd
+PUT http://localhost:3011/users/reset
+Content-Type: application/json
+
+
+
+{
+   "email": "james.kariuki@thejitu.com", 
+    "password": "123456789"
+   
+   
+}
+###Check details of the content
+
+POST http://localhost:3011/users/checkdetails
+Content-Type: application/json
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYTdjNDI5N2UtMjM3Yy00NzFlLWIyOWEtYzNlOTU2ZmQwNGU5IiwiZW1haWwiOiJqYW1lc2t3MjE4QGdtYWlsLmNvbSIsIm5hbWUiOiJKYW1lcyBLYXJpdWtpIiwicm9sZSI6ImFkbWluIiwiaXNXZWxjb21lZCI6bnVsbCwiaXNkZWxldGVkIjpmYWxzZSwiaWF0IjoxNzA4NDQ2NTM5LCJleHAiOjE3MDg3OTIxMzl9.KNsx1TxkyymyIXNDcVsp9sn7-6jrgtP0dGaUMNpI14A
