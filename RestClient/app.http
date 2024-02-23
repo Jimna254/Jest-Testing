@@ -1,0 +1,39 @@
+## Create  User
+POST http://localhost:3011/users
+Content-Type: application/json
+
+{
+    "name": "JamesKariuki",
+    "email": "james.kariuki@thejitu.com",
+    "cohort_number": "25",
+    "phone_number": "1234567890",
+    "password": "123456789"
+   
+}
+
+### Get all Users
+GET http://localhost:3011/users
+Content-Type: application/json
+
+
+### Get One
+GET http://localhost:3011/users/32a0cc8e-1f7f-45b0-9500-5d9b05dbdec8
+Content-Type: application/json
+
+### Update a user
+PUT http://localhost:3011/users/update/32a0cc8e-1f7f-45b0-9500-5d9b05dbdec8
+Content-Type: application/json
+
+
+{
+    "name": "JamesKariuki",
+    "email": "james.kariuki@thejitu.com",
+    "cohort_number": "26",
+    "phone_number": "1234567890",
+    "password": "123456789"
+}
+
+### Delete a user
+
+DELETE http://localhost:3011/users/delete/32a0cc8e-1f7f-45b0-9500-5d9b05dbdec8
+Content-Type: application/json
