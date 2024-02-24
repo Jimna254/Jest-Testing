@@ -10,7 +10,7 @@ import {
 
 jest.mock("../../DbHelper/db.Helper");
 
-// Mock setup for Express request and response
+
 const mockRequest = (params = {}, body = {}, query = {}) =>
   ({
     params,
@@ -61,13 +61,13 @@ describe("Users Controller Test Suite", () => {
 
     (Connection.execute as jest.Mock).mockResolvedValueOnce({
       recordset: [],
-      rowsAffected: [1], // Simulating successful user creation
+      rowsAffected: [1], 
     });
 
     await registerUser(req, res);
 
     expect(res.json).toHaveBeenCalledWith({
-      message: "JamesWanjiku Account was created successfully.", // Ensure the message matches exactly
+      message: "JamesWanjiku Account was created successfully.", 
     });
     expect(res.status).toHaveBeenCalledWith(201);
   });
