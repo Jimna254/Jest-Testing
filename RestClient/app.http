@@ -3,8 +3,8 @@ POST http://localhost:3011/users
 Content-Type: application/json
 
 {
-    "name": "JamesKariuki",
-    "email": "james.kariuki@thejitu.com",
+    "name": "JamesKariukiWanjiku",
+    "email": "james.wanjiku@thejitu.com",
     "cohort_number": "25",
     "phone_number": "1234567890",
     "password": "123456789"

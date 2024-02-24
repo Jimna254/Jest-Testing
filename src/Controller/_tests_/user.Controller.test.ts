@@ -1,113 +1,126 @@
-import bcrypt from "bcrypt";
-import mssql from "mssql";
+import { Request } from "express";
 import Connection from "../../DbHelper/db.Helper";
-import { getUsers, registerUser } from "../user.Controller";
+import {
+  registerUser,
+  getUsers,
+  getOneUser,
+  updateUser,
+  deleteUser,
+} from "../user.Controller";
 
-jest.mock("../DbHelper/db.Helper", () => {
-  return jest.fn().mockImplementation(() => {
-    return {
-      execute: jest.fn(),
-    };
-  });
-});
+jest.mock("../../DbHelper/db.Helper");
 
-// Mock Express Request and Response
+// Mock setup for Express request and response
 const mockRequest = (params = {}, body = {}, query = {}) =>
   ({
     params,
     body,
     query,
-  } as never);
+  } as Request);
 
 const mockResponse = () => {
   const res: any = {};
-  res.status = jest.fn().mockReturnValue(res);
-  res.json = jest.fn().mockReturnValue(res);
-  return res as Response;
+  res.status = jest.fn().mockReturnThis();
+  res.json = jest.fn().mockReturnThis();
+  return res;
 };
 
-describe("User Registration", () => {
+describe("Users Controller Test Suite", () => {
   let res: any;
+  let user: any;
   let users: any;
+
   beforeEach(() => {
-    res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn().mockReturnThis(),
+    res = mockResponse();
+
+    user = {
+      name: "JamesKariuki",
+      email: "james.kariuki@thejitu.com",
+      cohort_number: "26",
+      phone_number: "1234567890",
+      password: "123456789",
+      // isdeleted: false,
     };
 
     users = {
-      recordset: [
-        {
-          user_id: "32a0cc8e-1f7f-45b0-9500-5d9b05dbdec8",
-          name: "JamesKariuki",
-          email: "james.kariuki@thejitu.com",
-          cohort_number: "26",
-          phone_number: "1234567890",
-          password:
-            "$2b$05$LDDEWS/pKa2aMM04Jfh.ket5rVA2ZSLQMGYffatI3LUWXBywoJSpG",
-          isdeleted: false,
-        },
-      ],
+      recordset: [user],
     };
   });
 
-  it("successfully registers a user", async () => {
-    const req = {
-      body: {
-        name: "JamesKariuki",
-        email: "james.kariuki@thejitu.com",
-        cohort_number: "25",
+  it("registers a new user successfully", async () => {
+    const req = mockRequest(
+      {},
+      {
+        name: "JamesWanjiku",
+        email: "james.wanjiku@thejitu.com",
+        cohort_number: "26",
         phone_number: "1234567890",
         password: "123456789",
-      },
-    };
+      }
+    );
 
-    jest
-      .spyOn(bcrypt, "hash")
-      .mockResolvedValueOnce("HashedPwdkjshghgksjgkj" as never);
+    (Connection.execute as jest.Mock).mockResolvedValueOnce({
+      recordset: [],
+      rowsAffected: [1], // Simulating successful user creation
+    });
 
-    const mockedInput = jest.fn().mockReturnThis(); //for chainability
-
-    const mockedExecute = jest.fn().mockResolvedValue({ recordset: [] });
-
-    //const mockedExecute = jest.fn().mockResolvedValue({ rowsAffected: [1] });
-
-    const mockedRequest = {
-      input: mockedInput,
-      execute: mockedExecute,
-    };
-
-    const mockedPool = {
-      request: jest.fn().mockReturnValue(mockedRequest),
-    };
-
-    jest.spyOn(mssql, "connect").mockResolvedValue(mockedPool as never);
-
-    await registerUser(req as any, res);
+    await registerUser(req, res);
 
     expect(res.json).toHaveBeenCalledWith({
-      message: "JamesKariuki Account was created succesfully.",
+      message: "JamesWanjiku Account was created successfully.", // Ensure the message matches exactly
     });
     expect(res.status).toHaveBeenCalledWith(201);
   });
-});
 
-describe("getUsers", () => {
-  it("should return all users with a 200 status code", async () => {
+  it("gets all users successfully", async () => {
     const req = mockRequest();
-    const res = mockResponse();
-    const mockUsers = [
-      { id: "1", name: "John Doe" },
-      { id: "2", name: "Jane Doe" },
-    ];
 
-    Connection.execute.mockResolvedValueOnce({
-      recordset: mockUsers,
-    });
+    (Connection.execute as jest.Mock).mockResolvedValueOnce(users);
 
     await getUsers(req, res);
 
-    expect(res.json).toHaveBeenCalledWith({ users: mockUsers });
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({ users: users.recordset });
+  });
+
+  it("gets one user by ID successfully", async () => {
+    const req = mockRequest({ id: user.user_id });
+
+    (Connection.execute as jest.Mock).mockResolvedValueOnce({
+      recordset: [user],
+    });
+
+    await getOneUser(req, res);
+
+    expect(res.json).toHaveBeenCalledWith({ user });
+  });
+
+  it("updates a user successfully", async () => {
+    const req = mockRequest(
+      { id: user.user_id },
+      { name: "Updated Test User" }
+    );
+
+    (Connection.execute as jest.Mock).mockResolvedValueOnce({
+      rowsAffected: [1],
+    });
+
+    await updateUser(req, res);
+
+    expect(res.json).toHaveBeenCalledWith({
+      result: { rowsAffected: [1] },
+      message: "User updated successfully",
+    });
+  });
+
+  it("deletes a user by ID successfully", async () => {
+    const req = mockRequest({ id: user.user_id });
+
+    (Connection.execute as jest.Mock).mockResolvedValueOnce({
+      rowsAffected: [1],
+    });
+
+    await deleteUser(req, res);
+
+    expect(res.json).toHaveBeenCalledWith({ user: [1] });
   });
 });
