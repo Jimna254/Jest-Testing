@@ -8,61 +8,6 @@ import Connection from "../DbHelper/db.Helper";
 import { registerUserSchema } from "../Validators/register.validator";
 import jwt from "jsonwebtoken";
 
-// create a user
-// export const registerUser = async (req: Request, res: Response) => {
-//   try {
-//     let id = v4();
-
-//     console.log(id);
-
-//     const { name, email, cohort_number, password, phone_number }: User =
-//       req.body;
-
-//     console.log(req.body);
-
-//     let { error } = registerUserSchema.validate(req.body);
-//     if (error) {
-//       return res.status(404).json({
-//         error: error.details[0].message,
-//       });
-//     }
-
-//     const hashed_pwd = await bcrypt.hash(password, 5); // 5 saltRounds variable
-
-//     const pool = await mssql.connect(sqlConfig);
-
-//     const validatedresult = (
-//       await pool
-//         .request()
-//         .input("email", mssql.VarChar, email)
-//         .execute("ifUserExists")
-//     ).recordset;
-
-//     if (validatedresult.length >= 1) {
-//       return res.status(503).json({ message: "This email already exists" });
-//     } else {
-//       const result = (
-//         await pool
-//           .request()
-//           .input("user_id", mssql.VarChar, id)
-//           .input("name", mssql.VarChar, name)
-//           .input("email", mssql.VarChar, email)
-//           .input("phone_number", mssql.VarChar, phone_number)
-//           .input("cohort_number", mssql.VarChar, cohort_number)
-//           .input("password", mssql.VarChar, hashed_pwd)
-//           .execute("registerUser")
-//       ).rowsAffected;
-
-//       console.log(result);
-//       return res.status(201).json({
-//         message: `${name} Account was created succesfully.`,
-//       });
-//     }
-//   } catch (err) {
-//     console.log(err);
-//     return res.sendStatus(500).json({ message: err });
-//   }
-// };
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
