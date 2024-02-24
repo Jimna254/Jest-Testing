@@ -41,8 +41,6 @@ export const loginUser = async (req: Request, res: Response) => {
       user_id: user.user_id,
       email: user.email,
       name: user.name,
-      role: user.role,
-      isWelcomed: user.isWelcomed,
       isdeleted: user.isdeleted,
     };
 
